@@ -41,8 +41,8 @@ def grpc_read(uuid, grpc_server):
     stub = service_file_pb2_grpc.FileStub(channel)
     try:
         request = service_file_pb2.ReadRequest(uuid=service_file_pb2.Uuid(value=uuid))
-        response = stub.read(request)
-        print(f"gRPC: File content for {uuid}: {response.data.data}")
+        for response in stub.read(request):
+            print(response.data.data)
     except grpc.RpcError as e:
         print(f"Error during gRPC request: {e}")
 
