@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+/*
+UUID
+*/
+message Uuid { 
+    string value = 1;
+}
+
+message StatRequest {
+    Uuid uuid = 1;
+}
+
+message StatReply {
+    Data data = 1;
+    message Data {
+        google.protobuf.Timestamp create_datetime = 1;
+        uint64 size = 2;
+        string mimetype = 3;
+        string name = 4;
+    }
+}
+
+message ReadRequest {
+    Uuid uuid = 1;
+    uint64 size = 2;
+}
+
+message ReadReply {
+    Data data = 1;
+    message Data {
+        bytes data = 1;
+    }
+}
+
+service File
+{
+    rpc stat (StatRequest) returns (StatReply) {}
+    rpc read (ReadRequest) returns (stream ReadReply) {}
+}

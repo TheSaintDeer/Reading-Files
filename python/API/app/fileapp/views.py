@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import FileResponse, Http404
 
-FILES_DIR = './files'
 
+FILES_DIR = './files'
 
 class File:
 
@@ -38,14 +38,13 @@ class FileStatView(APIView, File):
     def get(self, request, uuid):   
 
         filename = self.get_filename(uuid)
-        print(filename)
         file_path = os.path.join(FILES_DIR, filename)
         if not os.path.exists(file_path):
             raise Http404("File not found")
         
         metadata = {
             "name": os.path.basename(file_path),
-            "size": os.stat(file_path).st_size, # 1018 bytes
+            "size": os.stat(file_path).st_size,
             "mimetype": self.get_mime_type(file_path), 
             "create_datetime": self.get_create_datetime(file_path)
         }
