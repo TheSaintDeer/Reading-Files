@@ -13,6 +13,8 @@ FILES_DIR = './files'
 class FileServicer(service_file_pb2_grpc.FileServicer):
 
     def stat(self, request, context):
+        '''Endpoint for reading file metadata'''
+        
         uuid = request.uuid.value
         pattern = r"{uuid}\.*".format(uuid=uuid)
         filename = ''
@@ -44,6 +46,8 @@ class FileServicer(service_file_pb2_grpc.FileServicer):
         )
 
     def read(self, request, context):
+        '''Endpoint for reading file'''
+
         uuid = request.uuid.value
         pattern = r"{uuid}\.*".format(uuid=uuid)
         filename = ''

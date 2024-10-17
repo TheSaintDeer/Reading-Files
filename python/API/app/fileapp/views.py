@@ -12,6 +12,7 @@ from django.http import FileResponse, Http404
 FILES_DIR = './files'
 
 class File:
+    '''Class for working with a file'''
 
     def get_filename(self, uuid):
         pattern = r"{uuid}\.*".format(uuid=uuid)
@@ -36,12 +37,13 @@ class File:
 class FileStatView(APIView, File):
     
     def get(self, request, uuid):   
+        '''Endpoint for reading file metadata'''
 
         filename = self.get_filename(uuid)
-        file_path = os.path.join(FILES_DIR, filename)
-        if not os.path.exists(file_path):
+        if not filename:
             raise Http404("File not found")
         
+        file_path = os.path.join(FILES_DIR, filename)
         metadata = {
             "name": os.path.basename(file_path),
             "size": os.stat(file_path).st_size,
@@ -55,12 +57,13 @@ class FileStatView(APIView, File):
 class FileReadView(APIView, File):
     
     def get(self, request, uuid):
+        '''Endpoint for reading file'''
 
         filename = self.get_filename(uuid)
-        file_path = os.path.join(FILES_DIR, filename)
-        if not os.path.exists(file_path):
+        if not filename:
             raise Http404("File not found")
-        
+
+        file_path = os.path.join(FILES_DIR, filename)
         return FileResponse(
             open(file_path, 'rb'), 
             as_attachment=True, 
